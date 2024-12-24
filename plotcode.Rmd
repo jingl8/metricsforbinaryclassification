@@ -1,0 +1,464 @@
+---
+title: "plotting code for figures and tables"
+author: "Jing Li"
+date: ""
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+
+
+```{r}
+library(ggplot2)
+library(reshape)
+library(ggpubr)
+
+metricsdf2 = read.csv("finalall.csv")
+
+metricsdf2 = subset(metricsdf2, AUC != 0)
+
+metricsdf2$Model = ifelse(metricsdf2$Model == "Logistic Regression", "GLM", metricsdf2$Model) # just rename model
+
+models = unique(metricsdf2$Model)
+
+```
+
+
+```{r}
+mglm1 = subset(metricsdf2, Model == models[1])[, c("Prevalence", "F1_score", "F_beta_score_0.5", "F_beta_score_2", "Fowlkes_Mallows_index", "Jaccardindex")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p1 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[1])
+
+mglm1 = subset(metricsdf2, Model == models[2])[, c("Prevalence", "F1_score", "F_beta_score_0.5", "F_beta_score_2", "Fowlkes_Mallows_index", "Jaccardindex")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p2 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(plot.title = element_text(size=12), legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[2])
+
+mglm1 = subset(metricsdf2, Model == models[3])[, c("Prevalence", "F1_score", "F_beta_score_0.5", "F_beta_score_2", "Fowlkes_Mallows_index", "Jaccardindex")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p3 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[3])
+
+mglm1 = subset(metricsdf2, Model == models[4])[, c("Prevalence", "F1_score", "F_beta_score_0.5", "F_beta_score_2", "Fowlkes_Mallows_index", "Jaccardindex")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p4 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[4])
+
+mglm1 = subset(metricsdf2, Model == models[5])[, c("Prevalence", "F1_score", "F_beta_score_0.5", "F_beta_score_2", "Fowlkes_Mallows_index", "Jaccardindex")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p5 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[5])
+
+mglm1 = subset(metricsdf2, Model == models[6])[, c("Prevalence", "F1_score", "F_beta_score_0.5", "F_beta_score_2", "Fowlkes_Mallows_index", "Jaccardindex")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p6 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[6])
+
+tiff("fig1.tiff", units="in", width=7, height= 5, res=450)
+ggarrange(p1, p2, p3, p4, p5, p6, ncol=3, nrow=2, common.legend = TRUE, legend="bottom")
+dev.off()
+```
+
+
+```{r}
+mglm1 = subset(metricsdf2, Model == models[1])[, c("Prevalence", "Accuracy", "BA", "BI", "Gmean", "AUC", "MCC", "Cohens_kappa")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p1 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[1])
+
+mglm1 = subset(metricsdf2, Model == models[2])[, c("Prevalence", "Accuracy", "BA", "BI", "Gmean", "AUC", "MCC", "Cohens_kappa")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p2 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(plot.title = element_text(size=12), legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[2])
+
+mglm1 = subset(metricsdf2, Model == models[3])[, c("Prevalence", "Accuracy", "BA", "BI", "Gmean", "AUC", "MCC", "Cohens_kappa")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p3 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[3])
+
+mglm1 = subset(metricsdf2, Model == models[4])[, c("Prevalence", "Accuracy", "BA", "BI", "Gmean", "AUC", "MCC", "Cohens_kappa")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p4 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[4])
+
+mglm1 = subset(metricsdf2, Model == models[5])[, c("Prevalence", "Accuracy", "BA", "BI", "Gmean", "AUC", "MCC", "Cohens_kappa")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p5 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[5])
+
+mglm1 = subset(metricsdf2, Model == models[6])[, c("Prevalence", "Accuracy", "BA", "BI", "Gmean", "AUC", "MCC", "Cohens_kappa")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p6 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[6])
+
+tiff("fig2.tiff", units="in", width=7, height= 5, res=450)
+ggarrange(p1, p2, p3, p4, p5, p6, ncol=3, nrow=2, common.legend = TRUE, legend="bottom")
+dev.off()
+```
+
+
+```{r}
+mglm1 = subset(metricsdf2, Model == models[1])[, c("Prevalence", "TPR", "TNR", "PPV", "NPV")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p1 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[1])
+
+mglm1 = subset(metricsdf2, Model == models[2])[, c("Prevalence", "TPR", "TNR", "PPV", "NPV")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p2 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(plot.title = element_text(size=12), legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[2])
+
+mglm1 = subset(metricsdf2, Model == models[3])[, c("Prevalence", "TPR", "TNR", "PPV", "NPV")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p3 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[3])
+
+mglm1 = subset(metricsdf2, Model == models[4])[, c("Prevalence", "TPR", "TNR", "PPV", "NPV")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p4 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[4])
+
+mglm1 = subset(metricsdf2, Model == models[5])[, c("Prevalence", "TPR", "TNR", "PPV", "NPV")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p5 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[5])
+
+mglm1 = subset(metricsdf2, Model == models[6])[, c("Prevalence", "TPR", "TNR", "PPV", "NPV")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p6 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[6])
+
+tiff("fig3.tiff", units="in", width=7, height= 5, res=450)
+ggarrange(p1, p2, p3, p4, p5, p6, ncol=3, nrow=2, common.legend = TRUE, legend="bottom")
+dev.off()
+```
+
+
+```{r}
+mglm1 = subset(metricsdf2, Model == models[1])[, c("Prevalence", "Diagnostic_odds_ratio")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p1 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[1])
+
+mglm1 = subset(metricsdf2, Model == models[2])[, c("Prevalence", "Diagnostic_odds_ratio")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p2 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(plot.title = element_text(size=12), legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[2])
+
+mglm1 = subset(metricsdf2, Model == models[3])[, c("Prevalence", "Diagnostic_odds_ratio")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p3 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[3])
+
+mglm1 = subset(metricsdf2, Model == models[4])[, c("Prevalence", "Diagnostic_odds_ratio")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p4 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[4])
+
+mglm1 = subset(metricsdf2, Model == models[5])[, c("Prevalence", "Diagnostic_odds_ratio")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p5 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[5])
+
+mglm1 = subset(metricsdf2, Model == models[6])[, c("Prevalence", "Diagnostic_odds_ratio")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p6 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[6])
+
+ggarrange(p1, p2, p3, p4, p5, p6, ncol=3, nrow=2, common.legend = TRUE, legend="bottom")
+ggsave("DOR.pdf", width=7, height= 4.5, units = "in")
+```
+
+
+```{r}
+mglm1 = subset(metricsdf2, Model == models[1])[, c("Prevalence", "Markedness")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p1 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[1])
+
+mglm1 = subset(metricsdf2, Model == models[2])[, c("Prevalence", "Markedness")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p2 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(plot.title = element_text(size=12), legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[2])
+
+mglm1 = subset(metricsdf2, Model == models[3])[, c("Prevalence", "Markedness")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p3 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[3])
+
+mglm1 = subset(metricsdf2, Model == models[4])[, c("Prevalence", "Markedness")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p4 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[4])
+
+mglm1 = subset(metricsdf2, Model == models[5])[, c("Prevalence", "Markedness")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p5 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[5])
+
+mglm1 = subset(metricsdf2, Model == models[6])[, c("Prevalence", "Markedness")]
+Molten1 <- melt(mglm1, id.vars = "Prevalence")
+p6 = ggplot(Molten1, aes(x = Prevalence, y = value, colour = variable)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme(legend.title = element_text(size = 6), legend.text  = element_text(size = 6), legend.key.size = unit(0.25, "lines")) + 
+        scale_x_continuous("Prevalence") + scale_colour_discrete("") + scale_x_reverse() + ggtitle(models[6])
+
+ggarrange(p1, p2, p3, p4, p5, p6, ncol=3, nrow=2, common.legend = TRUE, legend="bottom")
+ggsave("MK.pdf", width=7, height= 4.5, units = "in")
+```
+
+```{r, results='asis'}
+library(dplyr)
+
+#alternative color schemes that can be used if necessary
+#ccolors = c("red", "green", "pink", "blue", "black", "#DF536B", "gray62", "#CD0BBC", "#F5C710") 
+#ccolors = c(rainbow(10)[-c(4:5)], "black", "gray62")
+
+# just rename column names for plotting
+colnames(metricsdf2)[19] = "Diag_odds_ratio" 
+colnames(metricsdf2)[17] = "Fowlkes_Mallows" 
+
+plotdf <- melt(metricsdf2[,-25], id.vars = c("Model", "Prevalence"))
+
+rankdf = plotdf %>% arrange(Model, Prevalence, variable, value) %>%
+    group_by(Prevalence, variable) %>% 
+    mutate(rank = rank(desc(value)))
+
+variancedf = rankdf[,-4] %>%
+    group_by(Model, variable) %>% 
+    summarise(varrank = var(rank)) %>%
+    arrange(desc(varrank))
+
+colnames(variancedf)[2] = "Metric"
+
+library(tidyr)
+t3 = spread(variancedf, key = Model, value = varrank) %>%
+  arrange(desc(randomguess))
+
+colnames(t3)[6] = "Random_Forest"
+tdf = mutate(t3, mean_col = rowMeans(select(t3, c(GBM, GLM, KNN, LDA, Random_Forest, randomguess)), na.rm = TRUE)) %>%
+  arrange(desc(mean_col))
+
+# This produces table 4
+kableExtra::kable(tdf[,-8], digits = 3)
+```
+
+
+```{r, results='asis'}
+dfrun0 <- melt(metricsdf2[metricsdf2$Run ==0, -2], id.vars = "Model")
+
+rankdfrun0 = dfrun0[dfrun0$variable != "Run",] %>% arrange(Model, variable, value) %>%
+    group_by(variable) %>% 
+    mutate(rank = rank(desc(value)))
+
+rnkw = spread(rankdfrun0[,-3], key = Model, value = rank)
+
+colnames(rnkw)[1] = "Metric"
+
+# This produces table 2
+# The ranking for false positive and false negative has to be reversed because we value less these two types of outcomes.
+
+kableExtra::kable(rnkw)
+```
+
+
+```{r, results='asis'}
+rw = spread(dfrun0[dfrun0$variable != "Run",], key = Model, value = value)
+colnames(rw)[1] = "Metric"
+
+# This produces table 3
+kableExtra::kable(rw, digits = 3)
+```
+
+
+```{r, results='asis'}
+p1 = ggplot(metricsdf2, aes(x = Prevalence, y = TPR, colour = Model)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Prevalence") + scale_color_manual(values = rainbow(6)) + scale_x_reverse()
+
+p2 = ggplot(metricsdf2, aes(x = Prevalence, y = TNR, colour = Model)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Prevalence") + scale_color_manual(values = rainbow(6)) + scale_x_reverse()
+
+p3 = ggplot(metricsdf2, aes(x = Prevalence, y = PPV, colour = Model)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Prevalence") + scale_color_manual(values = rainbow(6)) + scale_x_reverse()
+
+p4 = ggplot(metricsdf2, aes(x = Prevalence, y = NPV, colour = Model)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Prevalence") + scale_color_manual(values = rainbow(6)) + scale_x_reverse()
+
+p5 = ggplot(metricsdf2, aes(x = Prevalence, y = F_beta_score_0.5, colour = Model)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Prevalence") + scale_color_manual(values = rainbow(6)) + scale_x_reverse()
+
+p6 = ggplot(metricsdf2, aes(x = Prevalence, y = F_beta_score_2, colour = Model)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Prevalence") + scale_color_manual(values = rainbow(6)) + scale_x_reverse()
+
+p7 = ggplot(metricsdf2, aes(x = Prevalence, y = F1_score, colour = Model)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Prevalence") + scale_color_manual(values = rainbow(6)) + scale_x_reverse()
+
+p8 = ggplot(metricsdf2, aes(x = Prevalence, y = Fowlkes_Mallows, colour = Model)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Prevalence") + scale_color_manual(values = rainbow(6)) + scale_x_reverse()
+
+p9 = ggplot(metricsdf2, aes(x = Prevalence, y = Jaccardindex, colour = Model)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Prevalence") + scale_color_manual(values = rainbow(6)) + scale_x_reverse()
+
+tiff("fig4.tiff", units="in", width=7, height= 7.5, res=450)
+ggarrange(p1, p2, p3, p4, p5, p6, p7, p8, p9, ncol=3, nrow=3, common.legend = TRUE, legend="bottom")
+dev.off()
+```
+
+
+```{r, results='asis'}
+p1 = ggplot(metricsdf2, aes(x = Prevalence, y = Gmean, colour = Model)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Prevalence") + scale_color_manual(values = rainbow(6)) + scale_x_reverse()
+
+p2 = ggplot(metricsdf2, aes(x = Prevalence, y = BA, colour = Model)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Prevalence") + scale_color_manual(values = rainbow(6)) + scale_x_reverse()
+
+p3 = ggplot(metricsdf2, aes(x = Prevalence, y = BI, colour = Model)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Prevalence") + scale_color_manual(values = rainbow(6)) + scale_x_reverse()
+
+p4 = ggplot(metricsdf2, aes(x = Prevalence, y = MCC, colour = Model)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Prevalence") + scale_color_manual(values = rainbow(6)) + scale_x_reverse()
+
+p5 = ggplot(metricsdf2, aes(x = Prevalence, y = AUC, colour = Model)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Prevalence") + scale_color_manual(values = rainbow(6)) + scale_x_reverse()
+
+p6 = ggplot(metricsdf2, aes(x = Prevalence, y = Accuracy, colour = Model)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Prevalence") + scale_color_manual(values = rainbow(6)) + scale_x_reverse()
+
+p7 = ggplot(metricsdf2, aes(x = Prevalence, y = Cohens_kappa, colour = Model)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Prevalence") + scale_color_manual(values = rainbow(6)) + scale_x_reverse()
+
+p8 = ggplot(metricsdf2, aes(x = Prevalence, y = Markedness, colour = Model)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Prevalence") + scale_color_manual(values = rainbow(6)) + scale_x_reverse()
+
+p9 = ggplot(metricsdf2, aes(x = Prevalence, y = Diag_odds_ratio, colour = Model)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Prevalence") + scale_color_manual(values = rainbow(6)) + scale_x_reverse()
+
+tiff("fig5.tiff", units="in", width=7, height= 7.5, res=450)
+ggarrange(p1, p2, p3, p4, p5, p6, p7, p8, p9, ncol=3, nrow=3, common.legend = TRUE, legend="bottom")
+dev.off()
+```
+
+
+```{r}
+df = rankdf[rankdf$variable %in% c("TPR", "TNR", "PPV", "NPV", "Fowlkes_Mallows", "Jaccardindex", "F1_score", "F_beta_score_0.5", "F_beta_score_2"), ]
+
+colnames(df)[3] = "Metric"
+
+p1 = ggplot(df[df$Model == models[1],], aes(x=Prevalence, y=rank, colour=Metric)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + scale_x_continuous("Percent positive in test data") +
+  scale_color_manual(values = rainbow(9)) + scale_x_reverse() + ggtitle(models[1])
+
+p2 = ggplot(df[df$Model == models[2],], aes(x=Prevalence, y=rank, colour=Metric)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Percent positive in test data") + scale_color_manual(values = rainbow(9)) + scale_x_reverse() + ggtitle(models[2])
+
+p3 = ggplot(df[df$Model == models[3],], aes(x=Prevalence, y=rank, colour=Metric)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Percent positive in test data") + scale_color_manual(values = rainbow(9)) + scale_x_reverse() + ggtitle(models[3])
+
+p4 = ggplot(df[df$Model == models[4],], aes(x=Prevalence, y=rank, colour=Metric)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Percent positive in test data") + scale_color_manual(values = rainbow(9)) + scale_x_reverse() + ggtitle(models[4])
+
+p5 = ggplot(df[df$Model == models[5],], aes(x=Prevalence, y=rank, colour=Metric)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Percent positive in test data") + scale_color_manual(values = rainbow(9)) + scale_x_reverse() + ggtitle(models[5])
+
+p6 = ggplot(df[df$Model == models[6],], aes(x=Prevalence, y=rank, colour=Metric)) + geom_smooth(se = FALSE) + geom_point(size = 0.75, position=position_jitter(h=0.01)) + theme_bw() + scale_x_continuous("Percent positive in test data") + scale_color_manual(values = rainbow(9)) + scale_x_reverse() + ggtitle(models[6])
+
+tiff("fig6.tiff", units="in", width=7, height= 8.5, res=450)
+ggarrange(p1, p2, p3, p4, p5, p6, ncol=2, nrow=3, common.legend = TRUE, legend="bottom")
+dev.off()
+```
+
+
+```{r}
+df = rankdf[rankdf$variable %in% c("Accuracy", "MCC", "Gmean", "AUC", "BA", "Markedness", "Diag_odds_ratio", "BI", "Cohens_kappa"), ]
+
+colnames(df)[3] = "Metric"
+
+p1 = ggplot(df[df$Model == models[1],], aes(x=Prevalence, y=rank, colour=Metric)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + scale_x_continuous("Percent positive in test data") +
+  scale_color_manual(values = rainbow(9)) + scale_x_reverse() + ggtitle(models[1])
+
+#scale_color_manual(values = palette(rainbow(12)))
+p2 = ggplot(df[df$Model == models[2],], aes(x=Prevalence, y=rank, colour=Metric)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Percent positive in test data") + scale_color_manual(values = rainbow(9)) + scale_x_reverse() + ggtitle(models[2])
+
+p3 = ggplot(df[df$Model == models[3],], aes(x=Prevalence, y=rank, colour=Metric)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Percent positive in test data") + scale_color_manual(values = rainbow(9)) + scale_x_reverse() + ggtitle(models[3])
+
+p4 = ggplot(df[df$Model == models[4],], aes(x=Prevalence, y=rank, colour=Metric)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Percent positive in test data") + scale_color_manual(values = rainbow(9)) + scale_x_reverse() + ggtitle(models[4])
+
+p5 = ggplot(df[df$Model == models[5],], aes(x=Prevalence, y=rank, colour=Metric)) +
+        geom_smooth(se = FALSE) + geom_point(size = 0.75) + theme_bw() + 
+        scale_x_continuous("Percent positive in test data") + scale_color_manual(values = rainbow(9)) + scale_x_reverse() + ggtitle(models[5])
+
+p6 = ggplot(df[df$Model == models[6],], aes(x=Prevalence, y=rank, colour=Metric)) + geom_smooth(se = FALSE) + geom_point(size = 0.75, position=position_jitter(h=0.01)) + theme_bw() + scale_x_continuous("Percent positive in test data") + scale_color_manual(values = rainbow(9)) + scale_x_reverse() + ggtitle(models[6])
+
+tiff("fig7.tiff", units="in", width=7, height= 8.5, res=450)
+ggarrange(p1, p2, p3, p4, p5, p6, ncol=2, nrow=3, common.legend = TRUE, legend="bottom")
+dev.off()
+```
+
+
+```{r}
+#additional color option
+# scale_color_manual(values = palette(rainbow(12)))
+#ccolors = c("red", "green", "pink", "yellow", "black", "#DF536B", "blue", "#CD0BBC", "#F5C710", "gray62")
+#ccolors = c(rainbow(9)[-c(5,9)], "black", "gray62")
+```
