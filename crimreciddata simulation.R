@@ -15,6 +15,9 @@ mt <- read.csv("MTURK_NO_RACE.csv")
 br <- read.csv("BROWARD_CLEAN.csv")
 rownames(br) <- as.character(br$id)
 
+# Preprocessing data steps up untill line 66, leverages part of the replication code contained in K. Bansak, Can nonexperts really emulate statistical learning methods? a comment on “the
+# accuracy, fairness, and limits of predicting recidivism”. Polit. Anal. 27, 370–380 (2019).
+
 # Charge id codes and names
 charge <- read.csv("CHARGE_ID.csv")
 charge$mturk_charge_name <- as.character(charge$mturk_charge_name)
